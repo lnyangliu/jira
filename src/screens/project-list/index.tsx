@@ -2,7 +2,7 @@ import React from "react"
 import { SearchPanel } from "./search-panel"
 import { List } from "./list"
 import { useState, useEffect } from "react"
-import {cleanObject} from "../../utils"
+import {cleanObject, useMount, useDebounce} from "../../utils"
 import * as qs from "qs"
 
 // const apiUrl = 'http://localhost:3001'
@@ -14,7 +14,7 @@ export const ProjectListScreen = () => {
         name: '',
         personId: ''
     })
-    const debounceParam = useDebounce(param, 2000)
+    const debounceParam = useDebounce(param, 200)
     useEffect(() => {
         fetch(`${apiUrl}/projects?${qs.stringify(cleanObject(debounceParam))}`).then(async response => {
             if (response.ok) {
@@ -35,19 +35,3 @@ export const ProjectListScreen = () => {
     </div>
 }
 
-export const useMount = (callback) => {
-    useEffect(() => {
-    callback()
-    }, [])
-}
-
-export const useDebounce = (value, delay) => {
-    const [debouncedValue, setdebouncedValue] = useState(value)
-
-    useEffect(() => {
-        const timeout = setTimeout(() => setdebouncedValue(value), delay)
-        // 每次在上一次useEffect处理完以后再运行
-        return () => clearTimeout(timeout)
-    }, [value, delay])
-    return debouncedValue;
-}
