@@ -7,12 +7,12 @@ export const isFalsy = (value: any): boolean=> value === 0 ? false : !value;
 // 不改变函数本身
 export const cleanObject = (object: object) => {
     const result = {...object}
-    Object.keys(result).forEach((key) => {
-        const value = result[key]
-        if(isFalsy(value)) {
-            delete result[key]
-        }
-    })
+    // Object.keys(result).forEach((key) => {
+    //     const value = result[key]
+    //     if(isFalsy(value)) {
+    //         delete result[key]
+    //     }
+    // })
     return result;
 }
 
