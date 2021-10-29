@@ -3,27 +3,45 @@ import { useState } from "react";
 import { LoginScreen } from "./login";
 import { RegisterScreen } from "./register";
 import styled from "@emotion/styled";
-import { Button, Divider } from "antd";
+import { Button, Divider, Typography } from "antd";
 import logo from "assets/logo.svg";
 import left from "assets/left.svg";
 import right from "assets/right.svg";
 
 export const UnauthenticatedApp = () => {
   const [isRegister, setIsRegister] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
   return (
     <Container>
       <Background>
         <Header />
       </Background>
-
+      <Button
+        onClick={() => {
+          throw new Error("点击抛出一个异常");
+        }}
+      >
+        抛出异常
+      </Button>
       <ShadowCard>
-          <Title>
-          {isRegister ? '请注册' : '请登录'}
-          </Title>
-        {isRegister ? <RegisterScreen /> : <LoginScreen />}
+        <Title>{isRegister ? "请注册" : "请登录"}</Title>
+        {error ? (
+          <Typography.Text type="danger">{error.message}</Typography.Text>
+        ) : null}
+        {isRegister ? (
+          <RegisterScreen onError={setError} />
+        ) : (
+          <LoginScreen onError={setError} />
+        )}
         <Divider />
-        <Button type={'link'} onClick={() => setIsRegister(!isRegister)}>
-        切换到{isRegister ? "已经有账号了？直接登录" : "没有账号？注册新账号"}
+        <Button
+          type={"link"}
+          onClick={() => {
+            setError(null);
+            setIsRegister(!isRegister);
+          }}
+        >
+          切换到{isRegister ? "已经有账号了？直接登录" : "没有账号？注册新账号"}
         </Button>
       </ShadowCard>
     </Container>
@@ -31,8 +49,8 @@ export const UnauthenticatedApp = () => {
 };
 
 export const LongButton = styled(Button)`
-width: 100%;
-`
+  width: 100%;
+`;
 
 const Title = styled.h2`
   margin-bottom: 2.4rem;
