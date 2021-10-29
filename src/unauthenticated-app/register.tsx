@@ -1,9 +1,11 @@
 import { Form, Input } from 'antd';
 import { useAuth } from 'context/auth-context';
 import { LongButton } from 'unauthenticated-app';
+import { useDocumentTitle } from 'utils';
 import { useAsync } from 'utils/use-async';
 
 export const RegisterScreen = ({onError} : {onError: (error: Error | null) => void}) => {
+    useDocumentTitle('请注册', false)
     const {register} = useAuth()
     const {run, isLoading} = useAsync(undefined, {throwOnError: true})
     const handleSubmit = async ({cpassword, ...values}: {username: string, password: string, cpassword: string}) => {
